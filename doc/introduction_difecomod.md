@@ -1,13 +1,13 @@
 ---
-title: "DIFECOMOD: Differential Co-occurrence Analysis of Microbiome Data"
+title: "difecomod: Differential Co-occurrence Analysis for Ecological Modules"
 author: "Jacopo Iacovacci"
 date: "2025-11-24"
-output: 
+output:
   rmarkdown::html_vignette:
     toc: true
     toc_depth: 2
 vignette: >
-  %\VignetteIndexEntry{Differential Co-occurrence Analysis of Microbiome Data}
+  %\VignetteIndexEntry{Differential Co-occurrence Analysis for Ecological Modules}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
