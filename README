@@ -9,13 +9,13 @@
 
 Given the modularity of microbial network interactions, we hypothesized that different ecosystem blocks or modules coexist within the microbiota and that changes in the host environment (e.g., disease conditions) might favor certain blocks of interacting species over others. 
 
-The package provides:
+The methodology consists of several key steps:
 
-- **Co-occurrence Analysis**: Compute frequencies of taxa co-occurrence patterns
-- **Statistical Testing**: Random and permutation models for significance testing  
-- **Network Construction**: Build networks of differential co-occurrences
-- **Higher-Order Interactions**: Analyze three-way and higher-order co-occurrences
-- **Visualization**: Network plots and heatmaps using modern R graphics
+1. **Data Processing**: Convert relative abundance data to binary occurrence matrices
+2. **Co-occurrence Calculation**: Compute frequencies of taxa co-occurrence in each condition
+3. **Statistical Testing**: Use null random and permutation models for co-occurrences to assess significance
+4. **Network Construction**: Build microbial networks of significant differential co-occurrences
+5. **Higher-Order Interactions**: Analyze three-taxa co-occurrences in data
 
 ## Installation
 
@@ -31,35 +31,24 @@ devtools::install_github("CMONLab/difecomod")
 
 **Note**: All required dependencies (igraph, network, pheatmap, ggplot2, zCompositions, RColorBrewer, and others) will be automatically installed. For the vignette examples, you may also need to install: `SummarizedExperiment` and `tictoc`.
 
-## Quick Start
+## Getting Started
+
+For a comprehensive tutorial with real microbiome data examples, see the package vignette:
 
 ```r
 library(difecomod)
 
-# Create example microbiome data
-set.seed(42)
-abundance_healthy <- matrix(runif(300, 0, 0.08), nrow = 20, ncol = 15)
-abundance_disease <- matrix(runif(330, 0, 0.06), nrow = 22, ncol = 15)
-
-# Set taxa names
-taxa_names <- paste0("Taxa_", sprintf("%02d", 1:15))
-colnames(abundance_healthy) <- colnames(abundance_disease) <- taxa_names
-
-# Run complete differential co-occurrence analysis
-results <- differential_cooccurrence_analysis(
-  abundance_matrix_1 = abundance_healthy,
-  abundance_matrix_2 = abundance_disease,
-  condition_names = c("Healthy", "Disease")
-)
-
-# View results
-print(results)
-
-# Plot network if significant interactions found
-if (sum(abs(results$network)) > 0) {
-  plot_cooccurrence_network(results$network)
-}
+# View the introductory vignette
+vignette("introduction_difecomod", package = "difecomod")
 ```
+
+The vignette demonstrates:
+- Loading and processing microbiome data
+- Converting abundance to occurrence matrices
+- Running statistical tests (random and permutation models)
+- Constructing differential co-occurrence networks
+- Analyzing higher-order interactions (triplets)
+- Visualizing results with heatmaps and network plots
 
 ## Key Features
 
@@ -91,15 +80,18 @@ Built-in plotting functions using:
 - `pheatmap` for abundance heatmaps with clustering
 - `GGally` and `network` for network visualizations
 
-## Methodology
+## Workflow
 
-The analysis workflow consists of:
+The typical analysis workflow includes:
 
-1. **Data Processing**: Convert relative abundance to binary occurrence matrices using configurable thresholds
-2. **Co-occurrence Calculation**: Compute frequencies of taxa co-presence in each condition
-3. **Statistical Testing**: Generate null distributions and calculate significance thresholds
-4. **Network Construction**: Identify significant differential co-occurrences meeting both statistical criteria
-5. **Visualization**: Create network diagrams and abundance heatmaps
+1. **Core Taxa Extraction**: Filter taxa based on prevalence thresholds (e.g., present in >10% of samples)
+2. **Occurrence Matrix Conversion**: Convert abundance data to binary occurrence matrices using detection thresholds
+3. **Co-occurrence Computation**: Calculate pairwise co-occurrence frequencies for each condition
+4. **Null Model Generation**: Create random and permutation-based null distributions
+5. **Statistical Thresholds**: Compute significance thresholds from both null models
+6. **Network Construction**: Identify differential co-occurrences that exceed both statistical criteria
+7. **Higher-Order Analysis**: Analyze three-way interactions within network triangles
+8. **Visualization**: Generate network plots and abundance heatmaps
 
 ## Real Data Applications
 
@@ -111,16 +103,19 @@ The methodology has been applied to:
 
 ## Documentation
 
-- **Vignette**: Comprehensive tutorial with examples (`vignette("introduction", package = "difecomod")`)
+- **Vignette**: Comprehensive tutorial with real microbiome data examples (`vignette("introduction_difecomod", package = "difecomod")`)
 - **Function Help**: Detailed documentation for all exported functions (`?function_name`)
-- **GitHub Wiki**: Extended examples and use cases
+- **GitHub Repository**: Extended examples and source code at [github.com/CMONLab/difecomod](https://github.com/CMONLab/difecomod)
 
-## Performance Considerations
+## Best Practices
 
-- **Sample Size**: Recommended >20 samples per condition
-- **Taxa Filtering**: Use prevalence thresholds (10-30% of samples) to focus on informative taxa  
-- **Computational Time**: Statistical testing scales with number of permutations (recommend 3000-5000)
-- **Memory Usage**: Efficient matrix operations minimize memory footprint
+When working with real microbiome data:
+
+1. **Sample Size**: Ensure adequate sample sizes (>20 samples per condition recommended)
+2. **Taxa Filtering**: Use appropriate prevalence thresholds to extract core genera (10% recommended)
+3. **Abundance Threshold**: Set meaningful detection thresholds (0.01-0.1% relative abundance)
+4. **Permutation/Reshuffling Number**: Use sufficient number of permutations/reshufflings for robust statistical inference (≥5000)
+5. **Biological Interpretation**: Validate significant interactions using biological knowledge and literature
 
 ## Contributing
 
