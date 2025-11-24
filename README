@@ -50,36 +50,6 @@ The vignette demonstrates:
 - Analyzing higher-order interactions (triplets)
 - Visualizing results with heatmaps and network plots
 
-## Key Features
-
-### 1. Robust Statistical Framework
-
-The package implements two complementary null models:
-
-- **Random Model**: Tests whether differential co-occurrence could arise by chance given individual taxa occurrence frequencies
-- **Permutation Model**: Tests whether patterns could result from random sample grouping
-
-### 2. Network-Based Analysis
-
-Constructs networks where:
-- Nodes represent microbial taxa
-- Edges represent significant differential co-occurrences
-- Edge direction indicates over/under-representation in conditions
-
-### 3. Higher-Order Interactions
-
-Beyond pairwise interactions, the package analyzes:
-- Three-way interactions (triplets)
-- Community-level interaction patterns
-- Ecosystem module identification
-
-### 4. Data Visualization
-
-Built-in plotting functions using:
-- `ggplot2` for publication-ready graphics
-- `pheatmap` for abundance heatmaps with clustering
-- `GGally` and `network` for network visualizations
-
 ## Workflow
 
 The typical analysis workflow includes:
@@ -92,14 +62,6 @@ The typical analysis workflow includes:
 6. **Network Construction**: Identify differential co-occurrences that exceed both statistical criteria
 7. **Higher-Order Analysis**: Analyze three-way interactions within network triangles
 8. **Visualization**: Generate network plots and abundance heatmaps
-
-## Real Data Applications
-
-The methodology has been applied to:
-
-- **Cancer Studies**: Gut microbiome differences in colorectal cancer vs. healthy controls
-- **Immunotherapy Response**: Microbiome patterns associated with treatment response
-- **Disease Progression**: Longitudinal changes in microbial community structure
 
 ## Documentation
 
@@ -127,14 +89,11 @@ We welcome contributions! Please:
 4. Push to branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
-## Citation
+## Reference
 
 If you use difecomod in your research, please cite:
 
-```
-[Jacopo Iacovacci] (2025). difecomod: Differential Co-occurrence of Ecological Modules. 
-R package version 0.1.0. https://github.com/CMONLab/difecomod
-```
+**Differential Co-occurrence Analysis: a Method to Extract Ecological Modules from Clinical Microbiome Data**. J. Iacovacci, N. Cannon, J.A. McCulloch, T. Rancati, G. Trinchieri (2025).
 
 ## License
 
@@ -143,11 +102,5 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Contact
 
 - **Author**: Jacopo Iacovacci
-- **Email**: jacopo.iacovacci@istitutotumori.mi.it  
+- **Email**: jacopo.iacovacci@istitutotumori.mi.it
 - **Issues**: [GitHub Issues](https://github.com/CMONLab/difecomod/issues)
-
-## Acknowledgments
-
-- Methodology development based on differential co-occurrence analysis principles
-- Statistical approaches adapted from network ecology literature
-- Visualization components built on the excellent R graphics ecosystem
