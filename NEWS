@@ -1,0 +1,44 @@
+# Changelog
+
+All notable changes to this project will be documented in this file.
+
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
+and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+
+## [Unreleased]
+
+## [0.1.0] - 2025-10-05
+
+### Added
+- Initial package structure and core functionality
+- `extract_cooccurrence_list()` - Extract pairwise co-occurrence frequencies
+- `extract_hoi_list()` - Extract higher-order interaction frequencies
+- `calculate_cooccurrence_matrix()` - Convert abundance to occurrence matrices
+- `delta_cooccurrence_random_model()` - Random null model for statistical testing
+- `delta_cooccurrence_permutation_model()` - Permutation null model for statistical testing
+- `delta_hoi_random_model()` - Random model for higher-order interactions
+- `delta_hoi_permutation_model()` - Permutation model for higher-order interactions
+- `construct_network_delta()` - Build differential co-occurrence networks
+- `construct_hoi_diagram()` - Create higher-order interaction diagrams
+- `plot_cooccurrence_network()` - Network visualization using ggplot2
+- `plot_cooccurrence_heatmap()` - Abundance heatmaps using pheatmap
+- `plot_differential_summary()` - Summary plots of differential analysis
+- `validate_occurrence_matrix()` - Data quality validation
+- `differential_cooccurrence_analysis()` - Main wrapper function for complete workflow
+- Comprehensive vignette with examples and methodology explanation
+- Unit tests using testthat framework
+- Documentation using roxygen2
+- Package infrastructure (DESCRIPTION, NAMESPACE, README)
+
+### Dependencies
+- Core: igraph, network, pheatmap, ggplot2, zCompositions, stats, utils
+- Suggested: GGally, dplyr, ggpubr, testthat, knitr, rmarkdown
+
+### Documentation
+- Complete function documentation with examples
+- Comprehensive vignette tutorial
+- README with quick start guide
+- MIT license
+
+[Unreleased]: https://github.com/yourusername/difecomod/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/yourusername/difecomod/releases/tag/v0.1.0

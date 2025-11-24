@@ -1,0 +1,39 @@
+Package: difecomod
+Type: Package
+Title: Differential Co-occurrence Analysis for Ecological Modules
+Version: 0.1.0
+Date: 2025-11-24
+Author: Jacopo Iacovacci <jacopo.iacovacci@istitutotumori.mi.it>
+Maintainer: Jacopo Iacovacci <jacopo.iacovacci@istitutotumori.mi.it>
+Description: Implements the differential co-occurrence analysis methodology for detecting 
+    ecological modules that change between host conditions in microbiome data.
+    The package provides functions for computing co-occurrence frequencies, differential co-occurrence statistical testing, higher-order interaction analysis, and network visualization. 
+    The method is designed for metagenomic sequencing data from clinical microbiome studies but is applicable to ecological data in general.
+License: MIT + file LICENSE
+Encoding: UTF-8
+LazyData: true
+Depends: R (>= 4.0.0)
+Imports:
+    stats,
+    utils,
+    graphics,
+    grDevices,
+    igraph,
+    network,
+    pheatmap,
+    ggplot2,
+    ggpubr,
+    zCompositions,
+    RColorBrewer
+Suggests:
+    testthat (>= 3.0.0),
+    knitr,
+    rmarkdown,
+    GGally,
+    dplyr,
+    SummarizedExperiment,
+    tictoc
+VignetteBuilder: knitr
+RoxygenNote: 7.3.2
+BugReports: https://github.com/CMONLab/difecomod/issues
+URL: https://github.com/CMONLab/difecomod

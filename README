@@ -1,0 +1,158 @@
+# difecomod: Differential Co-occurrence Analysis for Ecological Modules
+
+<!-- badges: start -->
+<!-- badges: end -->
+
+**difecomod** implements differential co-occurrence analysis methodology for detecting ecosystem blocks or modules that change between host conditions in microbiome data. This approach is particularly useful for understanding how microbial community interactions are altered by disease states, treatments, or environmental changes.
+
+## Overview
+
+Given the modularity of microbial network interactions, we hypothesized that different ecosystem blocks or modules coexist within the microbiota and that changes in the host environment (e.g., disease conditions) might favor certain blocks of interacting species over others. 
+
+The package provides:
+
+- **Co-occurrence Analysis**: Compute frequencies of taxa co-occurrence patterns
+- **Statistical Testing**: Random and permutation models for significance testing  
+- **Network Construction**: Build networks of differential co-occurrences
+- **Higher-Order Interactions**: Analyze three-way and higher-order co-occurrences
+- **Visualization**: Network plots and heatmaps using modern R graphics
+
+## Installation
+
+You can install the development version of difecomod from GitHub:
+
+```r
+# Install devtools if not already installed
+if (!require("devtools")) install.packages("devtools")
+
+# Install difecomod (dependencies will be installed automatically)
+devtools::install_github("CMONLab/difecomod")
+```
+
+**Note**: All required dependencies (igraph, network, pheatmap, ggplot2, zCompositions, RColorBrewer, and others) will be automatically installed. For the vignette examples, you may also need to install: `SummarizedExperiment` and `tictoc`.
+
+## Quick Start
+
+```r
+library(difecomod)
+
+# Create example microbiome data
+set.seed(42)
+abundance_healthy <- matrix(runif(300, 0, 0.08), nrow = 20, ncol = 15)
+abundance_disease <- matrix(runif(330, 0, 0.06), nrow = 22, ncol = 15)
+
+# Set taxa names
+taxa_names <- paste0("Taxa_", sprintf("%02d", 1:15))
+colnames(abundance_healthy) <- colnames(abundance_disease) <- taxa_names
+
+# Run complete differential co-occurrence analysis
+results <- differential_cooccurrence_analysis(
+  abundance_matrix_1 = abundance_healthy,
+  abundance_matrix_2 = abundance_disease,
+  condition_names = c("Healthy", "Disease")
+)
+
+# View results
+print(results)
+
+# Plot network if significant interactions found
+if (sum(abs(results$network)) > 0) {
+  plot_cooccurrence_network(results$network)
+}
+```
+
+## Key Features
+
+### 1. Robust Statistical Framework
+
+The package implements two complementary null models:
+
+- **Random Model**: Tests whether differential co-occurrence could arise by chance given individual taxa occurrence frequencies
+- **Permutation Model**: Tests whether patterns could result from random sample grouping
+
+### 2. Network-Based Analysis
+
+Constructs networks where:
+- Nodes represent microbial taxa
+- Edges represent significant differential co-occurrences
+- Edge direction indicates over/under-representation in conditions
+
+### 3. Higher-Order Interactions
+
+Beyond pairwise interactions, the package analyzes:
+- Three-way interactions (triplets)
+- Community-level interaction patterns
+- Ecosystem module identification
+
+### 4. Data Visualization
+
+Built-in plotting functions using:
+- `ggplot2` for publication-ready graphics
+- `pheatmap` for abundance heatmaps with clustering
+- `GGally` and `network` for network visualizations
+
+## Methodology
+
+The analysis workflow consists of:
+
+1. **Data Processing**: Convert relative abundance to binary occurrence matrices using configurable thresholds
+2. **Co-occurrence Calculation**: Compute frequencies of taxa co-presence in each condition
+3. **Statistical Testing**: Generate null distributions and calculate significance thresholds
+4. **Network Construction**: Identify significant differential co-occurrences meeting both statistical criteria
+5. **Visualization**: Create network diagrams and abundance heatmaps
+
+## Real Data Applications
+
+The methodology has been applied to:
+
+- **Cancer Studies**: Gut microbiome differences in colorectal cancer vs. healthy controls
+- **Immunotherapy Response**: Microbiome patterns associated with treatment response
+- **Disease Progression**: Longitudinal changes in microbial community structure
+
+## Documentation
+
+- **Vignette**: Comprehensive tutorial with examples (`vignette("introduction", package = "difecomod")`)
+- **Function Help**: Detailed documentation for all exported functions (`?function_name`)
+- **GitHub Wiki**: Extended examples and use cases
+
+## Performance Considerations
+
+- **Sample Size**: Recommended >20 samples per condition
+- **Taxa Filtering**: Use prevalence thresholds (10-30% of samples) to focus on informative taxa  
+- **Computational Time**: Statistical testing scales with number of permutations (recommend 3000-5000)
+- **Memory Usage**: Efficient matrix operations minimize memory footprint
+
+## Contributing
+
+We welcome contributions! Please:
+
+1. Fork the repository
+2. Create a feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
+
+## Citation
+
+If you use difecomod in your research, please cite:
+
+```
+[Jacopo Iacovacci] (2025). difecomod: Differential Co-occurrence of Ecological Modules. 
+R package version 0.1.0. https://github.com/CMONLab/difecomod
+```
+
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Contact
+
+- **Author**: Jacopo Iacovacci
+- **Email**: jacopo.iacovacci@istitutotumori.mi.it  
+- **Issues**: [GitHub Issues](https://github.com/CMONLab/difecomod/issues)
+
+## Acknowledgments
+
+- Methodology development based on differential co-occurrence analysis principles
+- Statistical approaches adapted from network ecology literature
+- Visualization components built on the excellent R graphics ecosystem
