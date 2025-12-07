@@ -1,6 +1,7 @@
 # difecomod: Differential Co-occurrence Analysis for Ecological Modules
 
-**difecomod** implements differential co-occurrence analysis methodology for detecting ecosystem blocks or modules that change between host conditions in clinical microbiome data. This approach is particularly useful for understanding how microbial community interactions are altered by disease states, treatments, or environmental changes.
+**difecomod** implements the differential co-occurrence analysis methodology for inferring ecological network modules that change between environmental conditions in data sets describing presence/absence of taxa.
+The workflow is designed for the analysis of clinical microbiome data sets, and is particularly useful to  understand how microbial community interactions are altered by disease states, treatments, or environmental changes.
 
 
 ## Installation
@@ -156,7 +157,7 @@ The vignette demonstrates:
 When working with real microbiome data:
 
 1. **Sample Size**: Ensure adequate sample sizes (>20 samples per condition recommended).
-2. **Core Extraction **: Use appropriate prevalence thresholds to extract core genera (e.g., abundance greater or equal to 1%  in at least 10% of samples).
+2. **Core Extraction**: Use appropriate prevalence thresholds to extract core genera (e.g., abundance greater or equal to 1%  in at least 10% of samples).
 3. **Binarization**: Set meaningful detection thresholds (default 0.01% relative abundance).
 4. **Null Models Generation**: Use sufficient number of permutations/shufflings for robust statistical inference (≥5000 recommended).
 5. **Biological Interpretation**: Validate significant interactions using biological knowledge and literature.
