@@ -1,25 +1,11 @@
 # difecomod: Differential Co-occurrence Analysis for Ecological Modules
 
-<!-- badges: start -->
-<!-- badges: end -->
+**difecomod** implements differential co-occurrence analysis methodology for detecting ecosystem blocks or modules that change between host conditions in clinical microbiome data. This approach is particularly useful for understanding how microbial community interactions are altered by disease states, treatments, or environmental changes.
 
-**difecomod** implements differential co-occurrence analysis methodology for detecting ecosystem blocks or modules that change between host conditions in microbiome data. This approach is particularly useful for understanding how microbial community interactions are altered by disease states, treatments, or environmental changes.
-
-## Overview
-
-Given the modularity of microbial network interactions, we hypothesized that different ecosystem blocks or modules coexist within the microbiota and that changes in the host environment (e.g., disease conditions) might favor certain blocks of interacting species over others. 
-
-The methodology consists of several key steps:
-
-1. **Data Processing**: Convert relative abundance data to binary occurrence matrices
-2. **Co-occurrence Calculation**: Compute frequencies of taxa co-occurrence in each condition
-3. **Statistical Testing**: Use null random and permutation models for co-occurrences to assess significance
-4. **Network Construction**: Build microbial networks of significant differential co-occurrences
-5. **Higher-Order Interactions**: Analyze three-taxa co-occurrences in data
 
 ## Installation
 
-You can install the development version of difecomod from GitHub:
+You can install the package difecomod from GitHub:
 
 ```r
 # Install devtools if not already installed
@@ -30,6 +16,7 @@ devtools::install_github("CMONLab/difecomod")
 ```
 
 **Note**: All required dependencies (igraph, network, pheatmap, ggplot2, zCompositions, RColorBrewer, and others) will be automatically installed. For the vignette examples, you may also need to install: `SummarizedExperiment` and `tictoc`.
+
 
 ## Getting Started
 
@@ -50,44 +37,130 @@ The vignette demonstrates:
 - Analyzing higher-order interactions (triplets)
 - Visualizing results with heatmaps and network plots
 
-## Workflow
 
-The typical analysis workflow includes:
+## Workflow overview
 
-1. **Core Taxa Extraction**: Filter taxa based on prevalence thresholds (e.g., present in >10% of samples)
-2. **Occurrence Matrix Conversion**: Convert abundance data to binary occurrence matrices using detection thresholds
-3. **Co-occurrence Computation**: Calculate pairwise co-occurrence frequencies for each condition
-4. **Null Model Generation**: Create random and permutation-based null distributions
-5. **Statistical Thresholds**: Compute significance thresholds from both null models
-6. **Network Construction**: Identify differential co-occurrences that exceed both statistical criteria
-7. **Higher-Order Analysis**: Analyze three-way interactions within network triangles
-8. **Visualization**: Generate network plots and abundance heatmaps
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │                    DIFECOMOD ANALYSIS WORKFLOW                      │
+  └─────────────────────────────────────────────────────────────────────┘
 
-## Documentation
+                           INPUT DATA
+                                │
+                ┌───────────────┴───────────────┐
+                │                               │
+           Condition 1                     Condition 2
+      (e.g., Healthy samples)         (e.g., Disease samples)
+      Abundance Matrix (N1 × M)       Abundance Matrix (N2 × M)
+                │                               │
+                └───────────────┬───────────────┘
+                                ↓
+  ┌───────────────────────────────────────────────────────────────────────────┐
+  │ STEP 1: CORE TAXA EXTRACTION                                              │
+  │  • Filter by prevalence threshold (e.g., abundance >=1% in >=10% samples) │
+  │  • Reduce to core microbiota (M → m taxa)                                 │
+  └───────────────────────────────────────────────────────────────────────────┘
+                                ↓
+                ┌───────────────┴───────────────┐
+                │                               │
+  ┌─────────────────────────┐       ┌─────────────────────────┐
+  │ STEP 2: BINARIZATION    │       │ STEP 2: BINARIZATION    │
+  │  Abundance → Occurrence │       │  Abundance → Occurrence │
+  │  (threshold: 0.01%)     │       │  (threshold: 0.01%)     │
+  │  Binary Matrix X1       │       │  Binary Matrix X2       │
+  │  (N1 × m)               │       │  (N2 × m)               │
+  └───────────┬─────────────┘       └───────────┬─────────────┘
+              │                                 │
+              └────────────┬────────────────────┘
+                           ↓
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │ STEP 3: CO-OCCURRENCE COMPUTATION                                   │
+  │  • Calculate pairwise co-occurrence frequencies                     │
+  │  • O1[i,j] = freq(taxon_i & taxon_j in condition 1)                 │
+  │  • O2[i,j] = freq(taxon_i & taxon_j in condition 2)                 │
+  │  • ΔO[i,j] = O1[i,j] - O2[i,j]                                      │
+  └─────────────────────────────────────────────────────────────────────┘
+                                ↓
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │ STEP 4: NULL MODEL GENERATION (n = 5000-8000 iterations)            │
+  ├─────────────────────────────────────────────────────────────────────┤
+  │  ┌──────────────────────────┐    ┌──────────────────────────┐       │
+  │  │  RANDOM MODEL            │    │  PERMUTATION MODEL       │       │
+  │  │  • Shuffle columns       │    │  • Shuffle sample labels │       │
+  │  │    independently         │    │    between conditions    │       │
+  │  │  • Test: random          │    │  • Test: arbitrary       │       │
+  │  │    co-occurrence         │    │    grouping              │       │
+  │  │  • Preserves marginal    │    │  • Preserves total       │       │
+  │  │    frequencies           │    │    sample structure      │       │
+  │  └──────────────────────────┘    └──────────────────────────┘       │
+  └─────────────────────────────────────────────────────────────────────┘
+                                ↓
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │ STEP 5: STATISTICAL THRESHOLDS                                      │
+  │  • Random model: μ ± σ (or n_sigma × σ)                             │
+  │  • Permutation model: 5th & 95th percentiles (conf = 0.05)          │
+  │  • Significant if BOTH criteria exceeded                            │
+  └─────────────────────────────────────────────────────────────────────┘
+                                ↓
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │ STEP 6: NETWORK CONSTRUCTION                                        │
+  │  • Nodes = Taxa with significant differential co-occurrences        │
+  │  • Edges = Significant ΔO values                                    │
+  │  • Edge sign:                                                       │
+  │    (+) = Over-represented in Condition 1                            │
+  │    (−) = Under-represented in Condition 1                           │
+  └─────────────────────────────────────────────────────────────────────┘
+                                ↓
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │ STEP 7: HIGHER-ORDER INTERACTIONS (HOI)                             │
+  │  • Identify triangles in network (3-node cliques)                   │
+  │  • Calculate three-way co-occurrence: O[i,j,k]                      │
+  │  • Generate null models for triplets                                │
+  │  • Test significance of Δ-HOI                                       │
+  │  • Construct HOI diagram                                            │
+  └─────────────────────────────────────────────────────────────────────┘
+                                ↓
+  ┌─────────────────────────────────────────────────────────────────────┐
+  │ STEP 8: VISUALIZATION                                               │
+  ├─────────────────────────────────────────────────────────────────────┤
+  │  ┌──────────────────────┐  ┌──────────────────────┐                 │
+  │  │ Network Plot         │  │ Abundance Heatmap    │                 │
+  │  │ • Differential       │  │ • CLR-transformed    │                 │
+  │  │   co-occurrence      │  │ • Sample clustering  │                 │
+  │  │   network            │  │ • Condition labels   │                 │
+  │  └──────────────────────┘  └──────────────────────┘                 │
+  │  ┌──────────────────────────────────────────────┐                   │
+  │  │ HOI Heatmap                                  │                   │
+  │  │ • Triplet interactions                       │                   │
+  │  │ • Green = enriched in Condition 1            │                   │
+  │  │ • Red = enriched in Condition 2              │                   │
+  │  └──────────────────────────────────────────────┘                   │
+  └─────────────────────────────────────────────────────────────────────┘
+                                ↓
+                          OUTPUT RESULTS
+                ┌───────────────┴───────────────┐
+                │                               │
+        Network Matrix                   HOI Diagram
+      (Significant ΔO)              (Significant Δ-HOI)
 
-- **Vignette**: Comprehensive tutorial with real microbiome data examples (`vignette("introduction_difecomod", package = "difecomod")`)
-- **Function Help**: Detailed documentation for all exported functions (`?function_name`)
-- **GitHub Repository**: Extended examples and source code at [github.com/CMONLab/difecomod](https://github.com/CMONLab/difecomod)
+  Key Concepts:
+  - ΔO = Differential co-occurrence (Condition 1 - Condition 2)
+  - Dual statistical criteria = Both random AND permutation models must be significant
+  - HOI = Higher-Order Interactions (three-taxa co-occurrences)
+  - m = Number of core taxa after filtering
+  - N1, N2 = Number of samples in each condition
+
+
 
 ## Best Practices
 
 When working with real microbiome data:
 
-1. **Sample Size**: Ensure adequate sample sizes (>20 samples per condition recommended)
-2. **Taxa Filtering**: Use appropriate prevalence thresholds to extract core genera (10% recommended)
-3. **Abundance Threshold**: Set meaningful detection thresholds (0.01-0.1% relative abundance)
-4. **Permutation/Reshuffling Number**: Use sufficient number of permutations/reshufflings for robust statistical inference (≥5000)
-5. **Biological Interpretation**: Validate significant interactions using biological knowledge and literature
+1. **Sample Size**: Ensure adequate sample sizes (>20 samples per condition recommended).
+2. **Core Extraction **: Use appropriate prevalence thresholds to extract core genera (e.g., abundance greater or equal to 1%  in at least 10% of samples).
+3. **Binarization**: Set meaningful detection thresholds (default 0.01% relative abundance).
+4. **Null Models Generation**: Use sufficient number of permutations/shufflings for robust statistical inference (≥5000 recommended).
+5. **Biological Interpretation**: Validate significant interactions using biological knowledge and literature.
 
-## Contributing
-
-We welcome contributions! Please:
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit changes (`git commit -m 'Add amazing feature'`)
-4. Push to branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
 
 ## Reference
 
