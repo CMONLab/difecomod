@@ -40,9 +40,10 @@ The vignette demonstrates:
 
 ## Workflow overview
 
-  ┌─────────────────────────────────────────────────────────────────────┐
-  │                    DIFECOMOD ANALYSIS WORKFLOW                      │
-  └─────────────────────────────────────────────────────────────────────┘
+```
+┌─────────────────────────────────────────────────────────────────────┐
+│                    DIFECOMOD ANALYSIS WORKFLOW                      │
+└─────────────────────────────────────────────────────────────────────┘
 
                            INPUT DATA
                                 │
@@ -141,15 +142,14 @@ The vignette demonstrates:
                 │                               │
         Network Matrix                   HOI Diagram
       (Significant ΔO)              (Significant Δ-HOI)
+```
 
-  Key Concepts:
-  - ΔO = Differential co-occurrence (Condition 1 - Condition 2)
-  - Dual statistical criteria = Both random AND permutation models must be significant
-  - HOI = Higher-Order Interactions (three-taxa co-occurrences)
-  - m = Number of core taxa after filtering
-  - N1, N2 = Number of samples in each condition
-
-
+**Key Concepts:**
+- **ΔO** = Differential co-occurrence (Condition 1 - Condition 2)
+- **Dual statistical criteria** = Both random AND permutation models must be significant
+- **HOI** = Higher-Order Interactions (three-taxa co-occurrences)
+- **m** = Number of core taxa after filtering
+- **N1, N2** = Number of samples in each condition
 
 ## Best Practices
 
