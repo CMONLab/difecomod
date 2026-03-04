@@ -28,7 +28,12 @@ library(difecomod)
 
 # View the introductory vignette
 vignette("introduction_difecomod", package = "difecomod")
+
+# Or browse vignettes
+browseVignettes("difecomod")
 ```
+
+**Alternatively**, you can [view the vignette HTML directly on GitHub](https://github.com/CMONLab/difecomod/blob/main/doc/introduction_difecomod.html) (download and open in a browser).
 
 The vignette demonstrates:
 - Loading and processing microbiome data

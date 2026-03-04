@@ -16,7 +16,7 @@
 .vscode/
 
 # produced vignettes
-vignettes/*.html
+# Note: We include vignettes/*.html so users can view the vignette on GitHub
 vignettes/*.pdf
 
 # OAuth2 token, see https://github.com/hadley/httr/releases/tag/v0.3
